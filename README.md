@@ -20,5 +20,4 @@ You can manually specific a config file location with --config. Alternatively, y
 Unix:
 ~/.config/infinite-pandora\config
 Win 7 (not roaming):
-C:\Users\<user>\AppData\Local\infinite-pandora\config
-```
+C:\Users\<user>\AppData\Local\infinite-pandora\config```
