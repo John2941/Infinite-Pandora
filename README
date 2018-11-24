@@ -1,4 +1,4 @@
-
+Basic usage:
 
 Sample CONFIG
 ```
@@ -17,6 +17,6 @@ download_directory=C:\Music
 ```
 You can manually specific a config file location with --config. Alternatively, you can place your config your OS's default application/config location such as:
 ```Unix:
-~/.config/infinite-pandora
+~/.config/infinite-pandora\config
 Win 7 (not roaming):
-C:\Users\<user>\AppData\Local\infinite-pandora```
+C:\Users\<user>\AppData\Local\infinite-pandora\config```

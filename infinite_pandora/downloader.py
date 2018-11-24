@@ -19,9 +19,9 @@ class Downloader(object):
         self._station_tag = 'pandora:station'
 
     def download(self, song):
-        print('DEBUG: old path name {}'.format(song))
+        # print('DEBUG: old path name {}'.format(song))
         target = self._format_target(song)
-        print('DEBUG: new path name {}'.format(target))
+        # print('DEBUG: new path name {}'.format(target))
         url = song.audios['low'].url
 
         self._ensure_dirname(target)

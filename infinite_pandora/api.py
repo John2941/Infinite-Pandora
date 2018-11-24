@@ -25,7 +25,7 @@ android_config = PandoraConfig('tuner.pandora.com', 'android', 'AC7IBG09A3DTSYM4
 
 
 class Pandora(object):
-    def __init__(self, user, password, config=android_config, proxy=None):
+    def __init__(self, user, password, config=windows_mobile_config, proxy=None):
         self.user = user
         self.password = password
         self.config = config
