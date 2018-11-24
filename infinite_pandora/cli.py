@@ -75,6 +75,10 @@ def download(ctx, station, target, sleep, tick_limit, sleep_factor):
 
     if 'download_directory' in config['SETTINGS']:
         target = config['SETTINGS']['download_directory']
+    if 'sleep_factor' in config['SETTINGS']:
+        sleep_factor = float(config['SETTINGS']['sleep_factor'])
+    if 'tick_limit' in config['SETTINGS']:
+        tick_limit = int(config['SETTINGS']['tick_limit'])
 
     pandora.auth()
     stations = pandora.stations()
