@@ -99,6 +99,11 @@ def download(ctx, station, target, sleep, tick_limit, sleep_factor):
         #    map(attrgetter('name'), playlist.songs)))
 
         for song in playlist.songs:
+            print('DEBUG: song_count: {}, station_cycle: {}, tick_count: {}, tick_limit: {}'.format(song_count,
+                                                                                                    station_cycle,
+                                                                                                    tick_count,
+                                                                                                    tick_limit))
+
             info('Downloading {} by {}', song.name, song.artist_name)
             song.station = station.name
             length = downloader.download(song) #station.name
@@ -108,7 +113,7 @@ def download(ctx, station, target, sleep, tick_limit, sleep_factor):
 
             if sleep:
                 sleep_length = sleep_factor * length
-                # info('Sleeping {} seconds', sleep_length)
+                print('DEBUG: Sleeping {} seconds'.format(sleep_length))
                 time.sleep(sleep_length)
         song_count += 1
 

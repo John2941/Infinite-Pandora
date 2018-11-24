@@ -19,9 +19,9 @@ class Downloader(object):
         self._station_tag = 'pandora:station'
 
     def download(self, song):
-        # print('DEBUG: old path name {}'.format(song))
+        print('DEBUG: old path name {}'.format(song))
         target = self._format_target(song)
-        # print('DEBUG: new path name {}'.format(target))
+        print('DEBUG: new path name {}'.format(target))
         url = song.audios['low'].url
 
         self._ensure_dirname(target)
@@ -63,7 +63,7 @@ class Downloader(object):
         new_word = unidecode(_str)
         bad_chars = "/?@*\\=|[]:\""
         for letter in bad_chars:
-            new_word.replace(letter, '_')
+            new_word = new_word.replace(letter, '_')
         if directory and new_word[-1] == '.':
             new_word = new_word[:-1] + '_'
         return new_word
