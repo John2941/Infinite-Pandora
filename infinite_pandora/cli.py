@@ -103,8 +103,9 @@ def download(ctx, station, target, sleep, tick_limit, sleep_factor):
             song.station = station.name
             length = downloader.download(song) #station.name
             tick_count += 1
-            if tick_limit <= tick_count:
+            if tick_limit > 0 and tick_limit <= tick_count:
                 sys.exit(0)
+
             if sleep:
                 sleep_length = sleep_factor * length
                 # info('Sleeping {} seconds', sleep_length)
