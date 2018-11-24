@@ -6,8 +6,6 @@ from infinite_pandora.downloader import Downloader
 import random
 import sys
 
-FOREVER = -1
-
 
 def info(message, *args, **kwargs):
     click.echo(click.style(message.format(*args, **kwargs), 'blue'))
@@ -58,22 +56,18 @@ def station_list(ctx):
 @click.option('--target', help='where to store files',
               default='.',
               type=click.Path(exists=True, file_okay=False, writable=True))
-@click.option('--add-station-tags/--no-add-station-tags', default=False)
 @click.option('--sleep/--no-sleep', default=True)
-@click.option('--count', default=FOREVER, type=int,
+@click.option('--count', 'tick_limit', default=-1, type=int,
               help='amount of songs to download')
 @click.option('--sleep-factor', default=1.0, type=float,
               help='which fraction of a job to sleep')
 @click.pass_context
-def download(ctx, station, target, add_station_tags, sleep, count,
-             sleep_factor):
-    if count != FOREVER:
-        raise Exception('not implemented')
-
+def download(ctx, station, target, sleep, tick_limit, sleep_factor):
     pandora = ctx.obj['PANDORA']
     config = ctx.obj['CONFIG']
     station_list = config['STATION']['stations'].split(',') if not station else list(station)
     station_cycle = int(config['STATION']['cycle'] if 'cycle' in config['STATION'] else 0) or 15
+    tick_count = 0
     song_count = station_cycle + 1  # make sure we trigger the station lookup on first iteration
 
     if not station_list:
@@ -81,8 +75,6 @@ def download(ctx, station, target, add_station_tags, sleep, count,
 
     if 'download_directory' in config['SETTINGS']:
         target = config['SETTINGS']['download_directory']
-
-
 
     pandora.auth()
     stations = pandora.stations()
@@ -99,17 +91,19 @@ def download(ctx, station, target, add_station_tags, sleep, count,
             downloader = Downloader(target, station.name)
 
         playlist = pandora.playlist(station)
-        #info('Got songs {}', ', '.join(
+        # info('Got songs {}', ', '.join(
         #    map(attrgetter('name'), playlist.songs)))
 
         for song in playlist.songs:
             info('Downloading {} by {}', song.name, song.artist_name)
             song.station = station.name
             length = downloader.download(song) #station.name
-
+            tick_count += 1
+            if tick_limit <= tick_count:
+                sys.exit(0)
             if sleep:
                 sleep_length = sleep_factor * length
-                #info('Sleeping {} seconds', sleep_length)
+                # info('Sleeping {} seconds', sleep_length)
                 time.sleep(sleep_length)
         song_count += 1
 
