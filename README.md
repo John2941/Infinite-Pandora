@@ -1,11 +1,11 @@
-Credit to [t-8ch](https://github.com/t-8ch) . This project was heavily based on [pandora-cli](https://github.com/t-8ch/pandora-cli)
+ Credit to [t-8ch](https://github.com/t-8ch) . This project was heavily based on [pandora-cli](https://github.com/t-8ch/pandora-cli)
 
-##Installation
+## Installation
 ```bash
 python setup.py install
 ```
 
-##Basic usage:
+## Basic usage:
 ```bash
 Usage: infinite-pandora [OPTIONS] COMMAND [ARGS]...
 
@@ -30,7 +30,7 @@ Options:
   --help                Show this message and exit.
 ```
 
-##Sample CONFIG
+## Sample CONFIG
 ```bash
 [LOGIN]
 user=username
