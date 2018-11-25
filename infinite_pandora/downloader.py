@@ -24,7 +24,10 @@ class Downloader(object):
         print('DEBUG: new path name {}'.format(target))
         url = song.audios['low'].url
 
-        self._ensure_dirname(target)
+        try:
+            self._ensure_dirname(target)
+        except FileNotFoundError:
+            return False
 
         if not os.path.exists(target):
             with open(target, 'wb') as fd:
@@ -35,7 +38,7 @@ class Downloader(object):
 
             self._tag_file_get_length(target, song)
             self._ensure_dirname(target)
-            return song.length
+            return song.length if song.length > 0 else 180
 
         else:
             return False
