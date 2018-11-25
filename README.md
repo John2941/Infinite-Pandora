@@ -1,4 +1,18 @@
+Credit to @t-8ch . This project was heavily based on https://github.com/t-8ch/pandora-cli
+
 Basic usage:
+```bash
+Usage: infinite-pandora [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --config FILENAME  configuration file to load
+  --help             Show this message and exit.
+
+Commands:
+  download
+  station
+```
+
 
 Sample CONFIG
 ```bash
@@ -20,4 +34,5 @@ You can manually specific a config file location with --config. Alternatively, y
 Unix:
 ~/.config/infinite-pandora\config
 Win 7 (not roaming):
-C:\Users\<user>\AppData\Local\infinite-pandora\config```
+C:\Users\<user>\AppData\Local\infinite-pandora\config
+```
