@@ -3,11 +3,20 @@ from collections import namedtuple
 import json
 import time
 from operator import attrgetter
-
+import logging
 import requests
 import cryptography
+import click_log
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
+
+log = logging.getLogger(__name__)
+log.setLevel(logging.INFO)
+formatter = logging.Formatter('1%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler = logging.StreamHandler()
+handler.setFormatter(formatter)
+log.addHandler(handler)
+click_log.basic_config(log)
 
 class PandoraException(Exception):
     pass
@@ -68,6 +77,7 @@ class Pandora(object):
         r = self._session.post(url, data=data, params=params)
         r.raise_for_status()
         j = r.json()
+        log.debug('Pandora() request')
         if j['stat'] != 'ok':
             raise PandoraException(j['code'], j['message'])
         else:
@@ -198,7 +208,6 @@ class Playlist(object):
 
     @classmethod
     def from_json(cls, json):
-        #return cls([Song.from_json(j) for j in json['items']])
         song_list = []
         for j in json['items']:
             song = Song.from_json(j)

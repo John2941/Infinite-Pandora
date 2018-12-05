@@ -1,12 +1,22 @@
 import os
 from unidecode import unidecode
-
+import logging
+import click_log
 import requests
 import re
 from mutagen.id3 import APIC, error, TIT2, TPE1, TALB, COMM, ID3, ID3NoHeaderError
 from mutagen.mp4 import MP4, MP4Cover
 
 from infinite_pandora.api import AudioQuality
+
+
+log = logging.getLogger(__name__)
+log.setLevel(logging.INFO)
+formatter = logging.Formatter('1%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler = logging.StreamHandler()
+handler.setFormatter(formatter)
+log.addHandler(handler)
+click_log.basic_config(log)
 
 
 class Downloader(object):
@@ -19,9 +29,8 @@ class Downloader(object):
         self._station_tag = 'pandora:station'
 
     def download(self, song):
-        print('DEBUG: old path name {}'.format(song))
         target = self._format_target(song)
-        print('DEBUG: new path name {}'.format(target))
+        log.debug('Saving {}\\{}\\{} as {}'.format(song.album_name, song.artist_name, song.name, target))
         url = song.audios['low'].url
 
         try:

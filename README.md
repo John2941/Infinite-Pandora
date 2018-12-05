@@ -1,5 +1,8 @@
  Credit to [t-8ch](https://github.com/t-8ch) . This project was heavily based on [pandora-cli](https://github.com/t-8ch/pandora-cli)
 
+## Description
+This mimics a typical pandora application, but does not play the songs. Instead it downloads the song, along with the song's metadata, to the user's specified directory. This is handy if you do not have access to a reliable internet connection but would still want to listen to pandora. Just let this script run for a while on a few stations and play back locally.
+
 ## Installation
 ```bash
 python setup.py install

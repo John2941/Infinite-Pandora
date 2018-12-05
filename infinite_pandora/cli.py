@@ -5,6 +5,16 @@ from infinite_pandora.api import *
 from infinite_pandora.downloader import Downloader
 import random
 import sys
+import logging
+import click_log
+
+log = logging.getLogger(__name__)
+log.setLevel(logging.INFO)
+formatter = logging.Formatter('1%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler = logging.StreamHandler()
+handler.setFormatter(formatter)
+log.addHandler(handler)
+click_log.basic_config(log)
 
 
 def info(message, *args, **kwargs):
@@ -25,15 +35,6 @@ def main(ctx, config_file):
     ctx.obj['PANDORA'] = Pandora(user=config['LOGIN']['user'],
                           password=config['LOGIN']['password'])
     ctx.obj['CONFIG'] = config
-
-    # settings = {}
-    # for line in config.readlines():
-    #     line = line.strip()
-    #     if line and line[0] != '#':
-    #         k, v = line.split('=')
-    #         settings[k.strip()] = v.strip()
-    # ctx.obj = Pandora(user=settings['user'],
-    #                       password=settings['password'])
 
 
 @main.group()
@@ -94,31 +95,43 @@ def download(ctx, station, target, sleep, tick_limit, sleep_factor):
                 info('Downloading station "{}" to {}"', station.name, target)
             downloader = Downloader(target, station.name)
 
-        playlist = pandora.playlist(station)
+        try:
+            playlist = pandora.playlist(station)
+        except PandoraException as e:
+            log.error(e)
+            time.sleep(30)
+            pandora = Pandora(user=config['LOGIN']['user'],
+                          password=config['LOGIN']['password'])
+            pandora.auth()
+            continue
         # info('Got songs {}', ', '.join(
         #    map(attrgetter('name'), playlist.songs)))
 
         for song in playlist.songs:
-            print('DEBUG: song_count: {}, station_cycle: {}, tick_count: {}, tick_limit: {}'.format(song_count,
-                                                                                                    station_cycle,
-                                                                                                    tick_count,
-                                                                                                    tick_limit))
-
+            log.debug('song_count: {}, station_cycle: {}, tick_count: {}, tick_limit: {}'.format(song_count,
+                                                                                                 station_cycle,
+                                                                                                 tick_count,
+                                                                                                 tick_limit))
             info('Downloading {} by {}', song.name, song.artist_name)
             song.station = station.name
 
             try:
                 downloader.download(song) #station.name
                 tick_count += 1
-            except Exception as e:
-                print('ERROR: {}'.format(e))
+            except PandoraException as e:
+                log.error(e)
+                time.sleep(30)
+                pandora = Pandora(user=config['LOGIN']['user'],
+                                  password=config['LOGIN']['password'])
+                pandora.auth()
+                continue
 
             if tick_limit > 0 and tick_limit <= tick_count:
                 sys.exit(0)
 
             if sleep:
                 sleep_length = sleep_factor * (song.length if song.length > 0 else 180)
-                print('DEBUG: Sleeping {} seconds'.format(sleep_length))
+                log.debug('Sleeping {} seconds'.format(sleep_length))
                 time.sleep(sleep_length)
         song_count += 1
 

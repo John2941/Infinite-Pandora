@@ -22,7 +22,7 @@ VERSION = '1.0'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    'requests', 'cryptography', 'click', 'mutagen', 'unidecode'
+    'requests', 'cryptography', 'click', 'mutagen', 'unidecode', 'click-log'
 ]
 
 # What packages are optional?
