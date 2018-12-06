@@ -39,11 +39,15 @@ class Downloader(object):
             return False
 
         if not os.path.exists(target):
-            with open(target, 'wb') as fd:
-                res = self._http_session.get(url, stream=True)
+            try:
+                with open(target, 'wb') as fd:
+                    res = self._http_session.get(url, stream=True)
 
-                for chunk in res.iter_content(2048):
-                    fd.write(chunk)
+                    for chunk in res.iter_content(2048):
+                        fd.write(chunk)
+            except FileNotFoundError as e:
+                log.error(e)
+                return False
 
             self._tag_file_get_length(target, song)
             self._ensure_dirname(target)
@@ -76,6 +80,8 @@ class Downloader(object):
         bad_chars = "/?@*\\=|[]:\""
         for letter in bad_chars:
             new_word = new_word.replace(letter, '_')
+        if new_word[-1] == ' ':
+            new_word = new_word[:-1]
         if directory and new_word[-1] == '.':
             new_word = new_word[:-1] + '_'
         return new_word
