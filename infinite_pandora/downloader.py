@@ -77,7 +77,7 @@ class Downloader(object):
     def _format_string_for_fs(_str, directory=False):
         '''Gets rid of unicode and characters that can't be saved in file name'''
         new_word = unidecode(_str)
-        bad_chars = "/?@*\\=|[]:\""
+        bad_chars = "/?@*\\=|[]:\"<>"
         for letter in bad_chars:
             new_word = new_word.replace(letter, '_')
         if new_word[-1] == ' ':
