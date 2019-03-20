@@ -9,7 +9,7 @@ import logging
 import click_log
 
 log = logging.getLogger(__name__)
-log.setLevel(logging.INFO)
+log.setLevel(logging.DEBUG)
 formatter = logging.Formatter('1%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler = logging.StreamHandler()
 handler.setFormatter(formatter)
@@ -93,8 +93,15 @@ def download(ctx, station, target, sleep, tick_limit, sleep_factor):
                 sys.exit(1)
             else:
                 info('Downloading station "{}" to {}"', station.name, target)
-            downloader = Downloader(target, station.name)
-
+            try:
+                downloader = Downloader(target, station.name)
+            except PandoraException as e:
+                log.error(e)
+                time.sleep(30)
+                pandora = Pandora(user=config['LOGIN']['user'],
+                                  password=config['LOGIN']['password'])
+                pandora.auth()
+                continue
         try:
             playlist = pandora.playlist(station)
         except PandoraException as e:
