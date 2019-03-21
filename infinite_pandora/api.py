@@ -8,6 +8,7 @@ import requests
 import cryptography
 import click_log
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from infinite_pandora.errors import *
 
 
 log = logging.getLogger(__name__)
@@ -18,8 +19,7 @@ handler.setFormatter(formatter)
 log.addHandler(handler)
 click_log.basic_config(log)
 
-class PandoraException(Exception):
-    pass
+
 
 PandoraConfig = namedtuple('PandoraConfig',
                            ['tuner_url', 'username', 'password', 'deviceid',
