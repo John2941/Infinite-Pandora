@@ -3,6 +3,7 @@ import click
 import configparser
 from infinite_pandora.api import *
 from infinite_pandora.downloader import Downloader
+from infinite_pandora.errors import *
 import random
 import sys
 import logging
@@ -87,8 +88,10 @@ def download(ctx, station, target, sleep, tick_limit, sleep_factor):
     while True:
         if song_count > station_cycle:
             song_count = 0
-            station = find_station(random.choice(station_list), stations)
+            random_station = random.choice(station_list)
+            station = find_station(random_station, stations)
             if not station:
+                raise StationException('{} station not found.'.format(random_station))
                 click.echo('Station not found')
                 sys.exit(1)
             else:
