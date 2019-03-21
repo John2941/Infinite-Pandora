@@ -28,3 +28,6 @@ class StationException(PandoraException):
 class SongDownloadException(PandoraException):
     pass
 
+
+class PlaylistException(PandoraException):
+    pass
