@@ -100,6 +100,7 @@ def download(ctx, station, target, sleep, tick_limit, sleep_factor):
                 downloader = Downloader(target, station.name)
             except PandoraException as e:
                 log.error(e)
+                raise SongDownloadException('Downloading {} from {} station'.format(target, station.name))
                 time.sleep(30)
                 pandora = Pandora(user=config['LOGIN']['user'],
                                   password=config['LOGIN']['password'])
@@ -109,6 +110,7 @@ def download(ctx, station, target, sleep, tick_limit, sleep_factor):
             playlist = pandora.playlist(station)
         except PandoraException as e:
             log.error(e)
+            raise PlaylistException('Playlist error. -- {}'.format(e))
             time.sleep(30)
             pandora = Pandora(user=config['LOGIN']['user'],
                           password=config['LOGIN']['password'])
@@ -130,6 +132,7 @@ def download(ctx, station, target, sleep, tick_limit, sleep_factor):
                 tick_count += 1
             except PandoraException as e:
                 log.error(e)
+                raise SongDownloadException('Downloading {} from {} station'.format(song.name, station.name))
                 time.sleep(30)
                 pandora = Pandora(user=config['LOGIN']['user'],
                                   password=config['LOGIN']['password'])
