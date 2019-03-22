@@ -133,7 +133,10 @@ class Pandora(object):
             'stationToken': station.token,
             'includeTrackLength': True,
         }
-        r = self.request('station.getPlaylist', data, tls=True, encrypt=True)
+        try:
+            r = self.request('station.getPlaylist', data, tls=True, encrypt=True)
+        except requests.exceptions.ConnectionError as e:
+            raise PlaylistException("Connection error: {}".format(e))
         return Playlist.from_json(r)
 
     @property
