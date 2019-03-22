@@ -108,9 +108,9 @@ def download(ctx, station, target, sleep, tick_limit, sleep_factor):
                 continue
         try:
             playlist = pandora.playlist(station)
-        except PandoraException as e:
-            log.error(e)
-            raise PlaylistException('Playlist error. -- {}'.format(e))
+        except PlaylistException:
+            # log.error(e)
+            # raise PlaylistException('Playlist error. -- {}'.format(e))
             time.sleep(30)
             pandora = Pandora(user=config['LOGIN']['user'],
                           password=config['LOGIN']['password'])
