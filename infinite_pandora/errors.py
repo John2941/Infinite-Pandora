@@ -13,12 +13,12 @@ click_log.basic_config(log)
 
 
 class PandoraException(Exception):
-    def __init__(self, msg=''):
-        self.msg = msg
-        log.error(msg)
+    def __init__(self, *args):
+        self.msg = args
+        log.error(self.msg)
 
     def __str__(self):
-        return self.msg
+        return str(self.msg)
 
 
 class StationException(PandoraException):
