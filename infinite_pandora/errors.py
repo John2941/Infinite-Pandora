@@ -1,6 +1,6 @@
 import logging
 import click_log
-
+import time
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
@@ -31,3 +31,9 @@ class SongDownloadException(PandoraException):
 
 class PlaylistException(PandoraException):
     pass
+
+
+class PandoraLoginException(PandoraException):
+    def __init__(self):
+        super(PandoraException, self).__init__()
+        time.sleep(60)
