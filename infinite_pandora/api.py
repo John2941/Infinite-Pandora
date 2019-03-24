@@ -19,7 +19,7 @@ handler.setFormatter(formatter)
 log.addHandler(handler)
 click_log.basic_config(log)
 
-
+MAX_LOGIN_ATTTEMPS = 5
 
 PandoraConfig = namedtuple('PandoraConfig',
                            ['tuner_url', 'username', 'password', 'deviceid',
@@ -90,7 +90,11 @@ class Pandora(object):
             'deviceModel': self.config.deviceid,
             'version': '5',
         }
-        r = self.request('auth.partnerLogin', data, encrypt=False, tls=True)
+        try:
+            r = self.request('auth.partnerLogin', data, encrypt=False, tls=True)
+        except requests.exceptions.ConnectionError as e:
+            raise PandoraLoginException(e)
+
         self.partner_auth_token = r['partnerAuthToken']
         self.partner_id = r['partnerId']
         s = r['syncTime']
@@ -111,7 +115,14 @@ class Pandora(object):
         self.user_id = r['userId']
 
     def auth(self):
-        self.partner_login()
+        login_attempt = 1
+        while login_attempt < MAX_LOGIN_ATTTEMPS:
+            try:
+                self.partner_login()
+                break
+            except PandoraLoginException:
+                login_attempt += 1
+
         self.user_login()
 
     def stations(self):
